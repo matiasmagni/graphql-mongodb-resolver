@@ -4,7 +4,10 @@
   "description": "Resolvers generator for GraphQL and MongoDB",
   "main": "lib/index.js",
   "scripts": {
-    "test": "jest --env=jsdom"
+    "build": "babel src --out-dir lib --ignore test.js",
+    "lint": "eslint src",
+    "test": "yarn run lint && yarn run build && jest --env=jsdom",
+    "clean": "rm -rf node_modules"
   },
   "repository": {
     "type": "git",
@@ -20,5 +23,30 @@
   "bugs": {
     "url": "https://github.com/pawelgalazka/graphql-mongodb-resolver/issues"
   },
-  "homepage": "https://github.com/pawelgalazka/graphql-mongodb-resolver#readme"
+  "homepage": "https://github.com/pawelgalazka/graphql-mongodb-resolver#readme",
+  "devDependencies": {
+    "babel-cli": "6.16.0",
+    "babel-core": "6.16.0",
+    "babel-eslint": "7.0.0",
+    "babel-preset-es2015": "6.16.0",
+    "babel-preset-stage-2": "6.16.0",
+    "babel-register": "6.16.3",
+    "eslint": "3.6.1",
+    "eslint-config-standard": "6.2.0",
+    "eslint-plugin-promise": "2.0.1",
+    "eslint-plugin-standard": "2.0.1",
+    "jest": "16.0.2"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-2"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint-config-standard"
+    ],
+    "parser": "babel-eslint"
+  }
 }

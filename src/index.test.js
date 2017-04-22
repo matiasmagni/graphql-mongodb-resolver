@@ -55,16 +55,13 @@ describe('resolve()', () => {
         expect(resolvers.message().then).toBeInstanceOf(Function)
       })
 
-      it('should be able to return results', (done) => {
+      it('should call mongodb api', (done) => {
         resolvers.message().then(results => {
           expect(results).toEqual(['query', 'results'])
+          expect(db.collection).toHaveBeenCalledWith('message')
+          expect(collectionApi.find).toHaveBeenCalledWith({})
           done()
         })
-      })
-
-      it('should call mongodb api', () => {
-        expect(db.collection).toHaveBeenCalledWith('message')
-        expect(collectionApi.find).toHaveBeenCalledWith({})
       })
     })
   })

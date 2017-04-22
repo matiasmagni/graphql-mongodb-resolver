@@ -4,7 +4,7 @@ export default function (schema, db) {
   const queryFieldsKeys = Object.keys(queryFields)
 
   queryFieldsKeys.forEach(key => {
-    resolvers[key] = (args) => {
+    resolvers[key] = (args = {}) => {
       return new Promise((resolve, reject) => {
         db.collection(key).find(args).toArray((error, results) => {
           if (error) {

@@ -20,14 +20,13 @@ var schema = buildSchema(`
 `);
 
 MongoClient.connect(url, function(err, db) {
-    var app = express();
-    app.use('/graphql', graphqlHTTP({
-      schema: schema,
-      rootValue: resolver(schema, db),
-      graphiql: true,
-    }));
-    app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'));
-  db.close();
+  var app = express();
+  app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: resolver(schema, db),
+    graphiql: true,
+  }));
+  app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'));
 });
 ```
 

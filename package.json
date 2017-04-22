@@ -4,7 +4,7 @@
   "description": "Resolvers generator for GraphQL and MongoDB",
   "main": "lib/index.js",
   "scripts": {
-    "start": "node ./sandbox/index.js",
+    "start": "mongod --dbpath=/data & node ./sandbox/index.js",
     "build": "babel src --out-dir lib --ignore test.js",
     "lint": "eslint src",
     "test": "yarn run lint && yarn run build && jest --env=jsdom",

@@ -43,17 +43,29 @@ describe('resolve()', () => {
     resolvers = resolve(schema, db)
   })
 
-  describe('queries', () => {
-    it('should do query call to mongodb', () => {
-      expect(resolvers.message()).toEqual(['query', 'results'])
-      expect(db.collection).toHaveBeenCalledWith('message')
-      expect(collectionApi.find).toHaveBeenCalledWith({})
+  describe('resolvers object', () => {
+    it('should have 1 resolver', () => {
+      expect(Object.keys(resolvers)).toEqual(['message'])
     })
+  })
 
-    it('should do query with param', () => {
-      expect(resolvers.message({author: 'Pawel'})).toEqual(['query', 'results'])
-      expect(db.collection).toHaveBeenCalledWith('message')
-      expect(collectionApi.find).toHaveBeenCalledWith({author: 'Pawel'})
+  describe('queries', () => {
+    describe('without params', () => {
+      it('should return a promise', () => {
+        expect(resolvers.message().then).toBeInstanceOf(Function)
+      })
+
+      it('should be able to return results', (done) => {
+        resolvers.message().then(results => {
+          expect(results).toEqual(['query', 'results'])
+          done()
+        })
+      })
+
+      it('should call mongodb api', () => {
+        expect(db.collection).toHaveBeenCalledWith('message')
+        expect(collectionApi.find).toHaveBeenCalledWith({})
+      })
     })
   })
 

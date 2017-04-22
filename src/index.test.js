@@ -43,25 +43,26 @@ describe('resolve()', () => {
     resolvers = resolve(schema, db)
   })
 
-  describe('resolvers object', () => {
-    it('should have 1 resolver', () => {
-      expect(Object.keys(resolvers)).toEqual(['message'])
+  describe('queries resolver', () => {
+    it('should return a promise', () => {
+      expect(resolvers.message().then).toBeInstanceOf(Function)
     })
-  })
 
-  describe('queries', () => {
-    describe('without params', () => {
-      it('should return a promise', () => {
-        expect(resolvers.message().then).toBeInstanceOf(Function)
+    it('should call mongodb api', (done) => {
+      resolvers.message().then(results => {
+        expect(results).toEqual(['query', 'results'])
+        expect(db.collection).toHaveBeenCalledWith('message')
+        expect(collectionApi.find).toHaveBeenCalledWith({})
+        done()
       })
+    })
 
-      it('should call mongodb api', (done) => {
-        resolvers.message().then(results => {
-          expect(results).toEqual(['query', 'results'])
-          expect(db.collection).toHaveBeenCalledWith('message')
-          expect(collectionApi.find).toHaveBeenCalledWith({})
-          done()
-        })
+    it('should call mongodb api with params', (done) => {
+      resolvers.message({author: 'Pawel'}).then(results => {
+        expect(results).toEqual(['query', 'results'])
+        expect(db.collection).toHaveBeenCalledWith('message')
+        expect(collectionApi.find).toHaveBeenCalledWith({author: 'Pawel'})
+        done()
       })
     })
   })

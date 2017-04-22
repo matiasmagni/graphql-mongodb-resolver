@@ -3,7 +3,22 @@
   "version": "1.0.0-alpha.0",
   "description": "Resolvers generator for GraphQL and MongoDB",
   "main": "lib/index.js",
-  "repository": "https://github.com/pawelgalazka/graphql-mongodb-resolver.git",
+  "scripts": {
+    "test": "jest --env=jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pawelgalazka/graphql-mongodb-resolver.git"
+  },
+  "keywords": [
+    "graphql",
+    "mongodb",
+    "resolver"
+  ],
   "author": "Pawel Galazka <pawel.galazka1986@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pawelgalazka/graphql-mongodb-resolver/issues"
+  },
+  "homepage": "https://github.com/pawelgalazka/graphql-mongodb-resolver#readme"
 }

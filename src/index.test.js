@@ -1,16 +1,22 @@
 /* eslint-env jest */
-import { buildSchema } from 'graphql'
-import resolve from './index'
+import { buildSchema, graphql } from 'graphql'
+import resolver from './index'
 
 const schemaString = `
   type Message {
     id: ID!
     content: String
-    author: String
+    author: Author
+  }
+  
+  type Author {
+    id: ID!
+    name: String 
   }
 
   type Query {
     message(id: ID!): Message
+    author(id: ID!): Author
   }
 
   type Mutation {
@@ -19,50 +25,39 @@ const schemaString = `
   }
 `
 
-describe('resolve()', () => {
-  let schema, db, resolvers, collectionApi, findApi
+describe('resolver()', () => {
+  let db, root, schema, results
 
   beforeEach(() => {
-    findApi = {
-      toArray (callback) {
-        callback(null, ['query', 'results'])
-      }
-    }
-
-    collectionApi = {
-      find: jest.fn().mockReturnValue(findApi),
-      insertOne: jest.fn(),
-      updateMany: jest.fn()
-    }
-
-    db = {
-      collection: jest.fn().mockReturnValue(collectionApi)
-    }
-
+    results = [
+      {field1: 'a', field2: 'b'},
+      {field1: 'c', field2: 'd'}
+    ]
     schema = buildSchema(schemaString)
-    resolvers = resolve(schema, db)
+    db = jest.fn().mockReturnValue(results)
+    root = resolver(schema)
   })
 
-  describe('queries resolver', () => {
-    it('should return a promise', () => {
-      expect(resolvers.message().then).toBeInstanceOf(Function)
-    })
-
-    it('should call mongodb api', (done) => {
-      resolvers.message().then(results => {
-        expect(results).toEqual(['query', 'results'])
-        expect(db.collection).toHaveBeenCalledWith('message')
-        expect(collectionApi.find).toHaveBeenCalledWith({})
-        done()
+  describe('queries', () => {
+    it('should return simple data without any relations', () => {
+      return root.author(null, {}, { db }).then(response => {
+        expect(db).toHaveBeenCalledWith({
+          collection: 'author',
+          action: 'find',
+          args: []
+        })
+        expect(response).toEqual(results)
       })
     })
 
-    it('should call mongodb api with params', (done) => {
-      resolvers.message({author: 'Pawel'}).then(results => {
-        expect(results).toEqual(['query', 'results'])
-        expect(db.collection).toHaveBeenCalledWith('message')
-        expect(collectionApi.find).toHaveBeenCalledWith({author: 'Pawel'})
-        done()
+    it('should return simple data without any relations with graphql', () => {
+      return graphql(schema, '{ author }', root).then(response => {
+        expect(db).toHaveBeenCalledWith({
+          collection: 'author',
+          action: 'find',
+          args: []
+        })
+        expect(response).toEqual({ author: results })
       })
     })
   })

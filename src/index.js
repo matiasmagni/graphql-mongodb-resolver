@@ -19,3 +19,11 @@ export default function (schema, db) {
 
   return resolvers
 }
+
+export function resolvers (fields) {
+
+}
+
+export function resolver (obj, args, context) {
+
+}

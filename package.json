@@ -8,7 +8,7 @@
     "start:mongo": "mongod --dbpath=/data",
     "build": "babel src --out-dir lib --ignore test.js",
     "lint": "eslint src",
-    "test": "yarn run lint && yarn run build && jest --env=jsdom",
+    "test": "yarn run lint && jest --env=jsdom",
     "clean": "rm -rf node_modules"
   },
   "repository": {

@@ -1,29 +1,17 @@
-export default function (schema, db) {
+export default function (schema) {
   const resolvers = {}
   const queryFields = schema.getQueryType().getFields()
   const queryFieldsKeys = Object.keys(queryFields)
 
   queryFieldsKeys.forEach(key => {
-    resolvers[key] = (args = {}) => {
-      return new Promise((resolve, reject) => {
-        db.collection(key).find(args).toArray((error, results) => {
-          if (error) {
-            reject(error)
-          } else {
-            resolve(results)
-          }
-        })
+    resolvers[key] = (obj, args = {}, context) => {
+      return context.db({
+        collection: key,
+        action: 'find',
+        args
       })
     }
   })
 
   return resolvers
-}
-
-export function resolvers (fields) {
-
-}
-
-export function resolver (obj, args, context) {
-
 }

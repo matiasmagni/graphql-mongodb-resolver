@@ -34,7 +34,7 @@ describe('resolver()', () => {
       {field1: 'c', field2: 'd'}
     ]
     schema = buildSchema(schemaString)
-    db = jest.fn().mockReturnValue(results)
+    db = jest.fn().mockReturnValue(Promise.resolve(results))
     root = resolver(schema)
   })
 
@@ -44,18 +44,18 @@ describe('resolver()', () => {
         expect(db).toHaveBeenCalledWith({
           collection: 'author',
           action: 'find',
-          args: []
+          args: {}
         })
         expect(response).toEqual(results)
       })
     })
 
     it('should return simple data without any relations with graphql', () => {
-      return graphql(schema, '{ author }', root).then(response => {
+      return graphql(schema, '{ author }', root, { db }).then(response => {
         expect(db).toHaveBeenCalledWith({
           collection: 'author',
           action: 'find',
-          args: []
+          args: {}
         })
         expect(response).toEqual({ author: results })
       })

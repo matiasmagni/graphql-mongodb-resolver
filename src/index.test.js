@@ -15,8 +15,8 @@ const schemaString = `
   }
 
   type Query {
-    message(id: ID!): Message
-    author(id: ID!): Author
+    message: Message
+    author: Author
   }
 
   type Mutation {
@@ -40,7 +40,7 @@ describe('resolver()', () => {
 
   describe('queries', () => {
     it('should return simple data without any relations', () => {
-      return root.author(null, {}, { db }).then(response => {
+      return root.author({}, { db }).then(response => {
         expect(db).toHaveBeenCalledWith({
           collection: 'author',
           action: 'find',
@@ -51,13 +51,16 @@ describe('resolver()', () => {
     })
 
     it('should return simple data without any relations with graphql', () => {
-      return graphql(schema, '{ author }', root, { db }).then(response => {
+      db = jest.fn().mockReturnValue(Promise.resolve({
+        name: 'test'
+      }))
+      return graphql(schema, '{ author { name } }', root, { db }).then(response => {
         expect(db).toHaveBeenCalledWith({
           collection: 'author',
           action: 'find',
           args: {}
         })
-        expect(response).toEqual({ author: results })
+        expect(response).toEqual({ data: { author: { name: 'test' } } })
       })
     })
   })

@@ -4,7 +4,7 @@ export default function (schema) {
   const queryFieldsKeys = Object.keys(queryFields)
 
   queryFieldsKeys.forEach(key => {
-    resolvers[key] = (obj, args = {}, context) => {
+    resolvers[key] = (args = {}, context) => {
       return context.db({
         collection: key,
         action: 'find',

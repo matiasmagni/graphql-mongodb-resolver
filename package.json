@@ -2,7 +2,7 @@
   "name": "graphql-mongodb-resolver",
   "version": "1.0.0-alpha.0",
   "description": "Resolvers generator for GraphQL and MongoDB",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node ./sandbox/index.js",
     "start:mongo": "mongod --dbpath=/data",

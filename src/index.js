@@ -1,4 +1,4 @@
-export default function (schema) {
+module.exports = function (schema) {
   const resolvers = {}
   const queryFields = schema.getQueryType().getFields()
   const queryFieldsKeys = Object.keys(queryFields)
